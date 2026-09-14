@@ -1,0 +1,22 @@
+meta {
+  name: Post Event
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:3000/api/events
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  "title": "Bruno Test Event",
+  "club_name": "Coding Club",
+  "event_date": "2026-12-15",
+  "location": "Lab 1"
+}

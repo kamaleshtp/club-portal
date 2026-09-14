@@ -1,0 +1,21 @@
+meta {
+  name: Post Member
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:3000/api/members
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  "fullName": "Bruno Test User",
+  "email": "bruno-test@example.com",
+  "club": "Coding Club"
+}

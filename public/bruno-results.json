@@ -1,0 +1,42 @@
+{
+  "runName": "Club Portal API — Smoke Suite",
+  "ranAt": "2026-09-09T10:15:00+05:30",
+  "results": [
+    {
+      "name": "Register User",
+      "method": "POST",
+      "url": "/api/register",
+      "status": 201,
+      "passed": true,
+      "durationMs": 42,
+      "response": "{ \"status\": \"success\", \"message\": \"User registered successfully!\" }"
+    },
+    {
+      "name": "Login User",
+      "method": "POST",
+      "url": "/api/login",
+      "status": 200,
+      "passed": true,
+      "durationMs": 18,
+      "response": "{ \"status\": \"success\", \"user\": { \"id\": 1, \"name\": \"Test User\" } }"
+    },
+    {
+      "name": "Get Clubs",
+      "method": "GET",
+      "url": "/api/clubs",
+      "status": 200,
+      "passed": true,
+      "durationMs": 9,
+      "response": "{ \"status\": \"success\", \"data\": [ ... ] }"
+    },
+    {
+      "name": "Add Event",
+      "method": "POST",
+      "url": "/api/events",
+      "status": 500,
+      "passed": false,
+      "durationMs": 31,
+      "response": "{ \"error\": \"NOT NULL constraint failed: events.title\" }"
+    }
+  ]
+}

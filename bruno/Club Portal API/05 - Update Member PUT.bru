@@ -1,0 +1,24 @@
+meta {
+  name: Update Member PUT
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:3000/api/members/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "fullName": "Updated Student",
+    "email": "updated@example.com",
+    "club": "Coding Club",
+    "role": "Member"
+  }
+}

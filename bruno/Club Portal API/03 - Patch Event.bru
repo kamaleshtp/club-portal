@@ -1,0 +1,19 @@
+meta {
+  name: Patch Event
+  type: http
+  seq: 3
+}
+
+patch {
+  url: http://localhost:3000/api/events/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  "location": "Updated Lab"
+}
