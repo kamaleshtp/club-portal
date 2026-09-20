@@ -83,11 +83,47 @@ app.get('/api/events', (req, res) => {
 
 app.post('/api/events', (req, res) => {
     const { title, club_name, event_date, location } = req.body;
-    db.run('INSERT INTO events (title, club_name, event_date, location) VALUES (?, ?, ?, ?)', 
-        [title, club_name, event_date, location], function(err) {
-            if (err) return res.status(500).json({ error: err.message });
-            res.status(201).json({ status: 'success', message: 'Event added!' });
-    });
+    if (!title || !club_name || !event_date || !location) {
+        return res.status(400).json({
+            error: 'Title, club name, event date and location are required'
+        });
+    }
+    const cleanClub = club_name.trim();
+    db.get(
+        'SELECT id FROM clubs WHERE LOWER(name) = LOWER(?)',
+        [cleanClub],
+        (clubErr, existingClub) => {
+
+            if (clubErr) {
+                return res.status(500).json({
+                    error: clubErr.message
+                });
+            }
+            if (!existingClub) {
+                return res.status(400).json({
+                    error: `Club '${cleanClub}' does not exist. Please select a valid club.`
+                });
+            }
+            db.run(
+                `INSERT INTO events 
+                (title, club_name, event_date, location)
+                VALUES (?, ?, ?, ?)`,
+                [title, cleanClub, event_date, location],
+                function(err) {
+
+                    if (err) {
+                        return res.status(500).json({
+                            error: err.message
+                        });
+                    }
+                    res.status(201).json({
+                        status: 'success',
+                        message: 'Event added!'
+                    });
+                }
+            );
+        }
+    );
 });
 
 app.put('/api/events/:id', (req, res) => {
