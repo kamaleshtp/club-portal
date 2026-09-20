@@ -242,7 +242,8 @@ document.getElementById('memberForm').addEventListener('submit', async (e) => {
 // Event Submit Form
 document.getElementById('eventForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    await apiFetch('/api/events', {
+
+    const res = await apiFetch('/api/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -252,8 +253,16 @@ document.getElementById('eventForm').addEventListener('submit', async (e) => {
             location: document.getElementById('evLoc').value
         })
     });
-    document.getElementById('eventForm').reset();
-    loadEvents();
+
+    const data = await res.json();
+
+    if (res.ok) {
+        alert(data.message || 'Event added!');
+        document.getElementById('eventForm').reset();
+        loadEvents();
+    } else {
+        alert(data.error || 'Unable to add event.');
+    }
 });
 
 // User Registration Form (on the auth gate)
