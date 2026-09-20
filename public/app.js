@@ -1,4 +1,4 @@
-// ---------- AUTH TAB SWITCHING ----------
+//AUTH TAB SWITCHING
 function showAuthTab(tab) {
     document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
     document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
@@ -6,7 +6,7 @@ function showAuthTab(tab) {
     document.getElementById('tabRegisterBtn').classList.toggle('active', tab === 'register');
 }
 
-// ---------- SHOW DASHBOARD / SHOW AUTH GATE ----------
+//SHOW DASHBOARD / SHOW AUTH GATE
 function enterDashboard(user) {
     document.getElementById('authGate').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
@@ -31,7 +31,7 @@ function logout() {
     }
 })();
 
-// ---------- DASHBOARD NAVIGATION ----------
+//DASHBOARD NAVIGATION
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -45,7 +45,7 @@ function showPage(pageId) {
     if (pageId === 'apitests') loadApiTests();
 }
 
-// ---------- LIVE API MONITOR ----------
+//LIVE API MONITOR
 // The API Tests page now calls the real backend directly. Bruno is still useful
 // for independent API testing, but these results are generated live by the frontend.
 const apiActivityLog = [];
