@@ -143,30 +143,71 @@ app.get('/api/members', (req, res) => {
 app.post('/api/members', (req, res) => {
     const { fullName, email, club } = req.body;
     if (!fullName || !email || !club) {
-        return res.status(400).json({ error: 'Full name, email and club are required' });
-    }
-
-    // A club member must already have a registered user account.
-    db.get('SELECT id FROM users WHERE LOWER(email) = LOWER(?)', [email.trim()], (lookupErr, user) => {
-        if (lookupErr) return res.status(500).json({ error: lookupErr.message });
-        if (!user) {
-            return res.status(400).json({
-                error: 'User is not registered. Please register before becoming a club member.'
-            });
-        }
-
-        db.run('INSERT INTO members (fullName, email, club) VALUES (?, ?, ?)', [fullName.trim(), email.trim(), club], function(err) {
-            if (err) {
-                if (err.message.includes('UNIQUE constraint failed')) {
-                    return res.status(400).json({ error: 'User is already a club member' });
-                }
-                return res.status(400).json({ error: err.message });
-            }
-            res.status(201).json({ status: 'success', message: 'Member registered to club!' });
+        return res.status(400).json({
+            error: 'Full name, email and club are required'
         });
-    });
-});
+    }
+    const cleanName = fullName.trim();
+    const cleanEmail = email.trim();
+    const cleanClub = club.trim();
+    db.get(
+        'SELECT id FROM clubs WHERE LOWER(name) = LOWER(?)',
+        [cleanClub],
+        (clubErr, existingClub) => {
 
+            if (clubErr) {
+                return res.status(500).json({
+                    error: clubErr.message
+                });
+            }
+            if (!existingClub) {
+                return res.status(400).json({
+                    error: `Club '${cleanClub}' does not exist. Please select a valid club.`
+                });
+            }
+            db.get(
+                'SELECT id FROM users WHERE LOWER(email) = LOWER(?)',
+                [cleanEmail],
+                (userErr, user) => {
+
+                    if (userErr) {
+                        return res.status(500).json({
+                            error: userErr.message
+                        });
+                    }
+
+                    if (!user) {
+                        return res.status(400).json({
+                            error: 'User is not registered. Please register before becoming a club member.'
+                        });
+                    }
+                    db.run(
+                        `INSERT INTO members (fullName, email, club)
+                         VALUES (?, ?, ?)`,
+                        [cleanName, cleanEmail, cleanClub],
+                        function (insertErr) {
+
+                            if (insertErr) {
+                                if (insertErr.message.includes('UNIQUE constraint failed')) {
+                                    return res.status(400).json({
+                                        error: 'User is already a club member'
+                                    });
+                                }
+                                return res.status(400).json({
+                                    error: insertErr.message
+                                });
+                            }
+                            res.status(201).json({
+                                status: 'success',
+                                message: 'Member registered to club!'
+                            });
+                        }
+                    );
+                }
+            );
+        }
+    );
+});
 app.put('/api/members/:id', (req, res) => {
     const { fullName, email, club, role } = req.body;
     if (!fullName || !email || !club) {
