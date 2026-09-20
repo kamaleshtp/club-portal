@@ -52,7 +52,7 @@ db.serialize(() => {
     });
 });
 
-// --- AUTH ENDPOINTS ---
+// AUTH ENDPOINTS 
 app.post('/api/register', (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) return res.status(400).json({ error: 'All fields required' });
@@ -71,12 +71,12 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// --- CLUBS ENDPOINTS ---
+// CLUBS ENDPOINTS
 app.get('/api/clubs', (req, res) => {
     db.all('SELECT * FROM clubs', [], (err, rows) => res.json({ status: 'success', data: rows }));
 });
 
-// --- EVENTS ENDPOINTS ---
+//EVENTS ENDPOINTS
 app.get('/api/events', (req, res) => {
     db.all('SELECT * FROM events ORDER BY id DESC', [], (err, rows) => res.json({ status: 'success', data: rows }));
 });
@@ -171,7 +171,7 @@ app.delete('/api/events/:id', (req, res) => {
     });
 });
 
-// --- MEMBERS ENDPOINTS ---
+//MEMBERS ENDPOINTS
 app.get('/api/members', (req, res) => {
     db.all('SELECT * FROM members ORDER BY id DESC', [], (err, rows) => res.json({ status: 'success', data: rows }));
 });
